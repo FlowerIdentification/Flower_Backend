@@ -1,7 +1,6 @@
 package com.zidi.flowerbackenddemo.controller;
 
 
-import com.zidi.flowerbackenddemo.dto.FlowerResultByPhoto;
 import com.zidi.flowerbackenddemo.dto.saveResultRequest;
 import com.zidi.flowerbackenddemo.entity.FlowerDescription;
 import com.zidi.flowerbackenddemo.entity.IdentificationResult;
@@ -65,9 +64,6 @@ public class UploadController {
 
 
         String imagePath = fileUploadService.getUploadDir() + File.separator + fileName;
-        FlowerResultByPhoto flowerResult = MLClient.identifyFlower(imagePath);
-
-        System.out.println("ML result: " + flowerResult.getName());
 
         return ResponseEntity.ok(fileName);
     }
@@ -81,19 +77,19 @@ public class UploadController {
 
         // save Result
         IdentificationResult result = new IdentificationResult();
-        result.flowerName = request.result.name;
-        result.confidence = request.result.confidence;
+        result.setFlowerName(request.result.name);
+        result.setConfidence(request.result.confidence);
         resultRepository.save(result);
 
         // Save description with result linked
         FlowerDescription desc = new FlowerDescription();
-        desc.imageName = request.imageName;
-        desc.color = request.color;
-        desc.petals = request.petals;
-        desc.smell = request.smell;
-        desc.location = request.location;
-        desc.user = userOpt.get();
-        desc.result = result;
+        desc.setImageName(request.imageName);
+        desc.setColor(request.color);
+        desc.setPetals(request.petals);
+        desc.setSmell(request.smell);
+        desc.setLocation(request.location);
+        desc.setUser(userOpt.get());
+        desc.setIdentificationResult(result);
 
         descriptionRepository.save(desc);
         return ResponseEntity.ok("Result saved successfully");
